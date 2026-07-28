@@ -1,0 +1,14 @@
+# Phase 1: full 3-encoder FusionAL (MolFormer + Uni-Mol + GROVER), matching
+# the paper's actual FusionAL baseline. fusional_lite (Phase 0) used
+# MolFormer + Uni-Mol only to keep GROVER's conformer/graph extraction cost
+# out of the critical path.
+name: fusional_full
+family: multi_view
+kind: frozen_embedding_fusion
+backbones: [molformer, unimol, grover]
+l2_normalize_per_view: true
+embed_dim: 2880   # 768 (molformer) + 512 (unimol) + 1600 (grover)
+embed_paths:
+  molformer: results/embed/{target}/molformer_embeddings.npz
+  unimol: results/embed/{target}/unimol_embeddings.npz
+  grover: results/embed/{target}/grover_embeddings.npz

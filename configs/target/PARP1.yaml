@@ -1,0 +1,7 @@
+# DOCKSTRING target for Phase 0 (MVP).
+# Docking scores from the DOCKSTRING dataset are kcal/mol-like Vina scores;
+# lower is better (minimize=true), matching molpal's LookupObjective convention.
+name: PARP1
+minimize: true
+pool_size: 50000       # Phase 0 subsample of the ~260K DOCKSTRING pool
+pool_seed: 0            # fixed seed for the subsample draw, independent of AL seeds

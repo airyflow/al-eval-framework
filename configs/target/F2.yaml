@@ -1,0 +1,8 @@
+# Second DOCKSTRING target, added to test whether the static-RMSE/AUDC
+# rank correlation observed on PARP1 (rho=0.89) generalizes or was
+# specific to that target (DESIGN.md flags F2 as the other well-studied
+# default target).
+name: F2
+minimize: true
+pool_size: 50000       # matches PARP1 methodology for a fair rho comparison
+pool_seed: 0            # fixed seed for the subsample draw, independent of AL seeds

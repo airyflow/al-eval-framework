@@ -1,0 +1,9 @@
+# Third DOCKSTRING target, chosen for pharmacological diversity from
+# PARP1 (DNA-repair enzyme) and F2 (serine protease): ESR2 is a nuclear
+# hormone receptor. Tests whether the static-RMSE/AUDC rank correlation
+# observed on PARP1 (rho=0.89) and F2 (rho=0.94) generalizes across a
+# structurally distinct target class, or was specific to those two.
+name: ESR2
+minimize: true
+pool_size: 50000       # matches PARP1/F2 methodology for a fair rho comparison
+pool_seed: 0            # fixed seed for the subsample draw, independent of AL seeds

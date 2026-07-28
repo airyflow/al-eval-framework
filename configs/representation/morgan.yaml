@@ -1,0 +1,6 @@
+name: morgan
+family: fingerprint
+kind: precomputed_no_extraction   # molpal.featurizer.Featurizer computes on the fly
+fingerprint: morgan
+radius: 2
+length: 2048

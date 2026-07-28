@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "al-eval-framework"
+version = "0.1.0"
+description = "Evaluation framework for frozen molecular representations under pool-based active learning"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "rdkit",
+    "torch",
+    "transformers",
+    "dockstring",
+    "configargparse",
+    "tqdm",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "molpal*", "muben*"]

@@ -1,0 +1,6 @@
+name: unimol
+family: 3d_geometry
+kind: frozen_embedding
+backbones: [unimol]
+embed_dim: 512
+embed_path: results/embed/{target}/unimol_embeddings.npz

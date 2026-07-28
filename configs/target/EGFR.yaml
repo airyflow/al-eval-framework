@@ -1,0 +1,9 @@
+# Fourth DOCKSTRING target, chosen for pharmacological diversity from
+# the first three: PARP1 (DNA-repair enzyme), F2 (serine protease), ESR2
+# (nuclear receptor). EGFR is a receptor tyrosine kinase (ATP-competitive
+# binding site), a fourth distinct target class and one of the most
+# well-characterized kinase targets in ML drug discovery benchmarks.
+name: EGFR
+minimize: true
+pool_size: 50000       # matches PARP1/F2/ESR2 methodology for a fair rho comparison
+pool_seed: 0            # fixed seed for the subsample draw, independent of AL seeds

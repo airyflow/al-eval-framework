@@ -1,0 +1,38 @@
+name: al-eval
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - rdkit
+
+  - pip:
+      - torch==2.3.1
+      - torchvision==0.18.1
+      - torchaudio==2.3.1
+      - --extra-index-url https://download.pytorch.org/whl/cu121
+
+      # transformers>=4.45 requires torch>=2.4 and silently disables the
+      # PyTorch backend against torch 2.3.1 (observed in the shared py310
+      # env used by FusionAL) — pin below that ceiling.
+      - transformers==4.44.2
+      - tokenizers<0.20
+
+      - dockstring
+      - configargparse
+      - descriptastorus
+      - lmdb
+      - regex
+      - torchmetrics
+      - tqdm
+      - typing_extensions
+      - h5py
+      - ray

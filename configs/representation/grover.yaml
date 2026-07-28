@@ -1,0 +1,10 @@
+# Phase 1: GROVER standalone.
+# 1600-d = bond-view + atom-view readout concatenated (extract_grover's
+# torch.cat([mol_from_bond, mol_from_atom])) -- carry this dimension
+# convention forward, not the paper draft's stated 300-d (DESIGN.md Sec 4.2).
+name: grover
+family: graph_topology
+kind: frozen_embedding
+backbones: [grover]
+embed_dim: 1600
+embed_path: results/embed/{target}/grover_embeddings.npz

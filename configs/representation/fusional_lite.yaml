@@ -1,0 +1,11 @@
+# Phase 0 FusionAL variant: MolFormer + Uni-Mol only (GROVER deferred to
+# Phase 1 to keep the MVP off the conformer-generation critical path).
+name: fusional_lite
+family: multi_view
+kind: frozen_embedding_fusion
+backbones: [molformer, unimol]
+l2_normalize_per_view: true
+embed_dim: 1280   # 768 (molformer) + 512 (unimol)
+embed_paths:
+  molformer: results/embed/{target}/molformer_embeddings.npz
+  unimol: results/embed/{target}/unimol_embeddings.npz

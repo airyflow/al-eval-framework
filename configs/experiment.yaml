@@ -1,0 +1,22 @@
+# Phase 1: scaling out from the Phase 0 MVP grid.
+target: PARP1
+representations: [morgan, molformer, unimol, grover, fusional_lite, fusional_full]
+acquisition: ucb
+ucb_beta: 1.0
+init_frac: 0.005     # |D0| = 0.5% of pool
+batch_frac: 0.01     # b = 1% of pool per round
+n_rounds: 5
+seeds: [0, 1, 2]
+
+surrogate:
+  hidden_dims: [512, 128]
+  dropout: 0.2
+  mc_samples: 50
+  lr: 3.0e-4
+  epochs: 50
+  batch_size: 256
+
+metrics:
+  recall_k_frac: 0.01     # Recall@1%
+  audc_t_frac: 0.05       # integrate Recall@k(t) over t in [0, 0.05 * |pool|]
+  criteria: [smoothness, calibration, latent_diversity, tanimoto_diversity, knn_precision]  # Phase 1: full C1-C4

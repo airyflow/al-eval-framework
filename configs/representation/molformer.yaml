@@ -1,0 +1,6 @@
+name: molformer
+family: sequence
+kind: frozen_embedding
+backbones: [molformer]
+embed_dim: 768
+embed_path: results/embed/{target}/molformer_embeddings.npz
