@@ -69,6 +69,45 @@ else:
     DEVICE = torch.device("cpu")
 
 
+def _verify_alignment(chunk_smiles: list, atoms: list, sample_size: int = 20, seed: int = 0) -> None:
+    """A count match (len(atoms) == len(chunk_smiles)) does not prove
+    molecule i's conformer actually came from chunk_smiles[i] -- if
+    generation and this script were ever run with a different
+    --num-chunks/--total-count, _chunk_bounds() would silently compute
+    different global-index boundaries, potentially preserving the count
+    while pairing every molecule with the wrong conformer. Re-derive each
+    sampled molecule's expected all-hydrogen atom count from its own
+    SMILES (matching this project's own 2D/3D-fallback atom-counting
+    convention: AllChem.AddHs(mol).GetNumAtoms()) and compare against
+    what the shard actually stored at that position -- this is a real
+    content check, not just a count, and fails loudly rather than
+    silently producing misaligned embeddings."""
+    from rdkit import Chem
+    from rdkit.Chem import AllChem
+
+    rng = np.random.default_rng(seed)
+    idxs = rng.choice(len(chunk_smiles), size=min(sample_size, len(chunk_smiles)), replace=False)
+
+    mismatches = []
+    for i in idxs:
+        smi = chunk_smiles[i]
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None:
+            continue  # unparseable SMILES can't be independently re-verified; not a misalignment signal
+        expected_n_atoms = AllChem.AddHs(mol).GetNumAtoms()
+        actual_n_atoms = len(atoms[i])
+        if expected_n_atoms != actual_n_atoms:
+            mismatches.append((i, smi, expected_n_atoms, actual_n_atoms))
+
+    if mismatches:
+        detail = "; ".join(f"index {i}: {smi!r} expected {exp} atoms, shard has {act}" for i, smi, exp, act in mismatches[:5])
+        raise RuntimeError(
+            f"Conformer/SMILES alignment check FAILED for {len(mismatches)}/{len(idxs)} sampled molecules "
+            f"({detail}) -- do not trust these embeddings. Almost certainly a --num-chunks/--total-count "
+            f"mismatch between the generate_conformers.py run that produced this shard and this invocation."
+        )
+
+
 def load_chunk_dataset(chunk_smiles: list, shard_path: Path, config):
     """Builds a DatasetUniMol directly from one conformer shard, bypassing
     DatasetUniMol.prepare()'s directory/partition-based file lookup (which
@@ -100,6 +139,7 @@ def load_chunk_dataset(chunk_smiles: list, shard_path: Path, config):
         f"Shard {shard_path} has {len(dataset._atoms)} records but the chunk has {n} SMILES -- "
         f"mismatched chunk boundaries (wrong --num-chunks/--total-count?) or an incomplete shard."
     )
+    _verify_alignment(chunk_smiles, dataset._atoms)
     dataset.data_instances = dataset.get_instances()
     return dataset, dictionary
 
